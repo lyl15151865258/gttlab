@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="苏州绿创检测技术服务有限公司,苏州绿创,绿创检测,空气净化器检测,扫地机器人检测,
+    空气检测,滤芯检测,水质检测,报告查询">
+    <meta name="description" content="苏州绿创检测技术服务有限公司官网">
+    <title class="i18n">绿创检测报告查询</title>
+    <link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/report.css">
+</head>
+
+<body>
+    <div class="report-content">
+        <img class="logo" src="/images/logo.jpg" alt="苏州绿创检测Logo">
+        <div class="report-item">
+            <label for="reportId">报告编号</label>
+            <input type="text" id="reportId" maxlength="11" autocomplete="on" placeholder=""
+                inputPlaceholder="reportId_placeholder">
+        </div>
+        <div class="report-item">
+            <label for="name">姓名</label>
+            <input type="text" id="name" disabled>
+        </div>
+        <div class="report-item">
+            <label for="phoneOrEmail">电话/邮箱</label>
+            <input type="text" id="phoneOrEmail" disabled>
+        </div>
+        <div class="report-item">
+            <label for="verifyCode">查询码</label>
+            <input class="input-code" type="text" maxlength="6" id="verifyCode"><button id="btnGetCode"
+                class="button-code" type="button" onclick="getQueryCode()" disabled>获取查询码</button>
+        </div>
+        <div id="warning"></div>
+        <button class="query" type="button" id="queryReport" onclick="getReport()" disabled>查询报告</button>
+    </div>
+    <script type="text/javascript" src="js/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery.i18n.properties.js"></script>
+    <script type="text/javascript" src="js/axios.js"></script>
+    <script src="./js/swiper-bundle.min.js"></script>
+    <script type="text/javascript"
+        src="https://webapi.amap.com/maps?v=1.4.15&key=b4617c1c56e146a92037f250a1c149ad"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
+
+</html>
