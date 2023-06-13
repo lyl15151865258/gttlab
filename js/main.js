@@ -1,18 +1,20 @@
 const BASE_URL = 'https://file.gttlab.com:9000';
 
-// 轮播图
+// 电脑端轮播图
 const slides = document.querySelectorAll(".banner-img");
 let counter = 0;
-setInterval(() => {
-    slides[counter].classList.remove("active");
-    counter++;
-    if (counter === slides.length) {
-        counter = 0;
-    }
-    slides[counter].classList.add("active");
-}, 5000);
+if (document.getElementById('swiper-pc') != null) {
+    setInterval(() => {
+        slides[counter].classList.remove("active");
+        counter++;
+        if (counter === slides.length) {
+            counter = 0;
+        }
+        slides[counter].classList.add("active");
+    }, 5000);
+}
 
-// 下一张图
+// 电脑端轮播图下一张图
 function lastImg() {
     slides[counter].classList.remove("active");
     counter--;
@@ -22,7 +24,7 @@ function lastImg() {
     slides[counter].classList.add("active");
 }
 
-// 上一张图
+// 电脑端轮播图上一张图
 function nextImg() {
     slides[counter].classList.remove("active");
     counter++;
@@ -32,24 +34,36 @@ function nextImg() {
     slides[counter].classList.add("active");
 }
 
-// 高德地图
-var marker, map = new AMap.Map("map-container", {
-    resizeEnable: true,
-    center: [120.531987, 31.258135],
-    zoom: 18
-});
-map.setMapStyle('amap://styles/whitesmoke');
-marker = new AMap.Marker({
-    icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
-    position: [120.531987, 31.258135]
-});
-marker.setMap(map);
+// 移动端轮播图
+if (document.getElementById('swiper-mobile') != null) {
+    var swiper = new Swiper(".mySwiper", {
+        pagination: {
+            el: ".swiper-pagination",
+            bulletActiveClass: 'my-bullet-active',
+        },
+        autoplay: { delay: 3000, stopOnLastSlide: false, disableOnInteraction: true },
+    });
+}
+
+// 高德地图（移动端没有地图）
+if (document.getElementById('map-container') != null) {
+    var marker, map = new AMap.Map("map-container", {
+        resizeEnable: true,
+        center: [120.531987, 31.258135],
+        zoom: 18
+    });
+    map.setMapStyle('amap://styles/whitesmoke');
+    marker = new AMap.Marker({
+        icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+        position: [120.531987, 31.258135]
+    });
+    marker.setMap(map);
+}
 
 // 报告查询公共常量
-const reportId = document.getElementById('reportId'); email
+const reportId = document.getElementById('reportId');
 const inputName = document.getElementById('name');
-const inputPhone = document.getElementById('phoneNumber');
-const inputEmail = document.getElementById('email');
+const inputPhoneOrEmail = document.getElementById('phoneOrEmail');
 const inputCode = document.getElementById('verifyCode');
 const btnCode = document.getElementById('btnGetCode');
 const btnQuery = document.getElementById('queryReport');
@@ -85,10 +99,9 @@ reportId.addEventListener('input', (event) => {
                 if (res.data.code === 1001) {
                     if (res.data.data.linkman != null && res.data.data.mobile != null) {
                         inputName.value = res.data.data.linkman;
-                        inputPhone.value = res.data.data.mobile;
-                        inputEmail.value = res.data.data.mail;
+                        inputPhoneOrEmail.value = res.data.data.phoneOrEmail;
                         // 正确获取信息后允许点击获取查询码按钮
-                        if (validReportId.test(value) && inputName.value != null && (inputPhone.value != null || inputEmail.value != null)) {
+                        if (validReportId.test(value) && inputName.value != null && inputPhoneOrEmail.value != null) {
                             if (!isCounting) {
                                 btnCode.disabled = false;
                             }
@@ -131,8 +144,7 @@ reportId.addEventListener('input', (event) => {
 function clearData() {
     // 清空姓名、电话和查询码
     inputName.value = '';
-    inputPhone.value = '';
-    inputEmail.value = '';
+    inputPhoneOrEmail.value = '';
     inputCode.value = '';
     // 禁止获取查询码和查询按钮的点击
     btnCode.disabled = true;
@@ -224,7 +236,7 @@ inputCode.addEventListener('input', (event) => {
     if (validCode.test(value)) {
         // 查询码合法
         // 判断报告编号、用户名、手机号（或邮箱）是否都存在
-        if (validReportId.test(reportId.value) && inputName.value != null && (inputPhone.value != null || inputEmail.value != null)) {
+        if (validReportId.test(reportId.value) && inputName.value != null && inputPhoneOrEmail.value != null) {
             // 输入框内容均合法，允许查询按钮的点击
             btnQuery.disabled = false;
         } else {
@@ -241,7 +253,7 @@ inputCode.addEventListener('input', (event) => {
 // 报告查询
 function getReport() {
     // 检查报告编号、查询码是否合法，联系人、电话是否存在
-    if (validReportId.test(reportId.value) && inputName.value != null && (inputPhone.value != null || inputEmail.value != null) && inputCode.value != null) {
+    if (validReportId.test(reportId.value) && inputName.value != null && inputPhoneOrEmail.value != null && inputCode.value != null) {
         // 调接口获取查询码
         let param = {
             reportId: reportId.value,
@@ -259,30 +271,46 @@ function getReport() {
                 if (res.data.code === 1001) {
                     // 查询到文件名，拿到文件名后再次请求文件
                     var file = res.data.data.filename;
-                    let param = {
-                        filename: file,
-                    };
-                    axios.request({
-                        url: BASE_URL + "/report/getReport",
-                        method: "post",
-                        responseType: "blob",
-                        data: param,
-                        withCredentials: true
-                    }).then(res => {
-                        hideError();
-                        const blob = new Blob([res.data], { type: 'application/pdf' });
-                        const fileURL = window.URL.createObjectURL(blob);
+                    // let param = {
+                    //     filename: file,
+                    // };
+                    // axios.request({
+                    //     url: BASE_URL + "/report/getReport",
+                    //     method: "post",
+                    //     responseType: "blob",
+                    //     data: param,
+                    //     withCredentials: true
+                    // }).then(res => {
+                    //     hideError();
+                    //     const blob = new Blob([res.data], { type: 'application/pdf' });
+                    //     const fileURL = window.URL.createObjectURL(blob);
+                    //     window.open(fileURL, '_blank');
+                    //     // const link = document.createElement('a');
+                    //     // link.href = fileURL;
+                    //     // // 设置下载的文件名
+                    //     // // link.setAttribute('download', file);
+                    //     // // 在新标签页中打开
+                    //     // link.target = '_blank';
+                    //     // // document.body.appendChild(link);
+                    //     // link.click();
+                    // }).catch(error => {
+                    //     showError(error, "#FF0000");
+                    // });
+
+                    // 使用PDFJS加载文件
+                    var filename = BASE_URL + "/files/" + file.substr(0, 8) + "/" + file;
+                    var url = '../js/pdfjs/web/viewer.html?file=' + filename;
+                    if (isApple()) {
+                        window.location = url;
+                    } else {
                         const link = document.createElement('a');
-                        link.href = fileURL;
-                        // 设置下载的文件名
-                        // link.setAttribute('download', file);
+                        link.href = url;
                         // 在新标签页中打开
                         link.target = '_blank';
-                        // document.body.appendChild(link);
                         link.click();
-                    }).catch(error => {
-                        showError(error, "#FF0000");
-                    });
+                    }
+
+                    // window.open('../js/pdfjs/normal/web/viewer.html?file=' + filename);
                 } else if (res.data.code === 1014) {
                     showError("查询码错误，请重试", "#FF0000");
                 } else if (res.data.code === 1013) {
@@ -311,4 +339,12 @@ function showError(errMsg, color) {
 function hideError() {
     warning.innerHTML = "";
     warning.style.display = 'none';
+}
+
+function isApple() {
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+        return true;
+    } else {
+        return false;
+    }
 }

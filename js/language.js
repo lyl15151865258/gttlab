@@ -1,4 +1,5 @@
 var LANGUAGE_CODE = "zh_CN"; //标识语言
+const imgLang = document.getElementById('imgLang');
 
 /**
  * 获取之前保存的语言或浏览器语言
@@ -19,7 +20,22 @@ var getNavLanguage = function () {
 }
 
 /**
- * 语言切换方法
+ * 语言切换方法（不带语言参数）
+ */
+function changeLang() {
+	if(LANGUAGE_CODE === "zh_CN"){
+		LANGUAGE_CODE = "en_US";
+		switchLang('en_US');
+		imgLang.setAttribute('src', '/images/chinese.jpg');
+	}else{
+		LANGUAGE_CODE = "zh_CN";
+		switchLang('zh_CN');
+		imgLang.setAttribute('src', '/images/english.jpg');
+	}
+};
+
+/**
+ * 语言切换方法（带语言参数）
  */
 function switchLang(type) {
 	/* 需要引入 i18n 文件*/

@@ -18,6 +18,11 @@
 
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/main.css">
+    <script type="text/javascript">
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            window.location.href = "index2.html"; /* 跳转到移动端页面 */
+        }
+    </script>
 </head>
 
 <body>
@@ -43,7 +48,7 @@
             </ul>
         </div>
     </header>
-    <div class="banner">
+    <div class="banner" id="swiper-pc">
         <div class="banner-content">
             <img class="banner-img active" src="/images/banner1.jpg" alt="">
             <img class="banner-img" src="/images/banner2.jpg" alt="">
@@ -185,11 +190,8 @@
                 <label for="name" class="i18n" contrastName="NAME">姓名</label>
                 <input type="text" id="name" disabled>
                 <br>
-                <label for="phoneNumber" class="i18n" contrastName="TELEPHONE">电话</label>
-                <input type="text" id="phoneNumber" disabled>
-                <br>
-                <label for="email" class="i18n" contrastName="EMAIL2">邮箱</label>
-                <input type="text" id="email" disabled>
+                <label for="phoneOrEmail" class="i18n" contrastName="TELEPHONE_EMAIL">电话/邮箱</label>
+                <input type="text" id="phoneOrEmail" disabled>
                 <br>
                 <label for="verifyCode" class="i18n" contrastName="CODE">查询码</label>
                 <input class="input-code" type="text" maxlength="6" id="verifyCode"><button class="button-code i18n"
@@ -230,6 +232,8 @@
     <script type="text/javascript" src="js/jquery.i18n.properties.js"></script>
     <script type="text/javascript" src="js/axios.js"></script>
     <script type="text/javascript" src="js/language.js"></script>
+    <script type="text/javascript" src="js/pdfjs/build/pdf.js"></script>
+    <script type="text/javascript" src="js/pdfjs/build/pdf.worker.js"></script>
     <script type="text/javascript"
         src="https://webapi.amap.com/maps?v=1.4.15&key=b4617c1c56e146a92037f250a1c149ad"></script>
     <script type="text/javascript" src="js/main.js"></script>
