@@ -309,7 +309,8 @@ function getReport() {
                         link.target = '_blank';
                         link.click();
                     }
-                    // window.open('../js/pdfjs/web/viewer.html?file=' + filename);
+
+                    // window.open('../js/pdfjs/normal/web/viewer.html?file=' + filename);
                 } else if (res.data.code === 1014) {
                     showError("查询码错误，请重试", "#FF0000");
                 } else if (res.data.code === 1013) {
