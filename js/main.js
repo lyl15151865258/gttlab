@@ -68,12 +68,12 @@ const inputCode = document.getElementById('verifyCode');
 const btnCode = document.getElementById('btnGetCode');
 const btnQuery = document.getElementById('queryReport');
 const warning = document.getElementById('warning');
-// 报告编号格式校验
+// 查询编号格式校验
 const validReportId = /^[A-Z0-9]{4}-[A-Z0-9]{3}-[A-Z0-9]{2}$/;
 // 查询码格式校验
 const validCode = /^\d{6}$/;
 
-// 监听报告编号输入
+// 监听查询编号输入
 reportId.addEventListener('input', (event) => {
     const value = event.target.value;
     // 限制只允许输入数字、字母和-
@@ -84,7 +84,7 @@ reportId.addEventListener('input', (event) => {
         event.target.value = newValue;
     }
     if (validReportId.test(value)) {
-        // 报告编号合法
+        // 查询编号合法
         let param = {
             reportId: value,
         };
@@ -117,7 +117,7 @@ reportId.addEventListener('input', (event) => {
                     }
                 } else if (res.data.code === 1011) {
                     clearData();
-                    showError("报告编号不存在，请检查", "#FF0000");
+                    showError("查询编号不存在，请检查", "#FF0000");
                 } else if (res.data.code === 1012) {
                     clearData();
                     showError("检测项目不存在，请检查", "#FF0000");
@@ -178,7 +178,7 @@ function getQueryCode() {
                         showError("查询码获取成功，请通过手机号联系报告联系人", "#29A243");
                     }
                 } else if (res.data.code === 1011) {
-                    showError("报告编号不存在，请检查", "#FF0000");
+                    showError("查询编号不存在，请检查", "#FF0000");
                 } else if (res.data.code === 1012) {
                     showError("检测项目不存在，请检查", "#FF0000");
                 } else if (res.data.code === 1015) {
@@ -193,7 +193,7 @@ function getQueryCode() {
             showError(error, "#FF0000");
         });
     } else {
-        showError("请输入正确的报告编号", "#FF0000");
+        showError("请输入正确的查询编号", "#FF0000");
     }
 }
 
@@ -223,7 +223,7 @@ function startCountdown() {
 }
 
 // 监听查询码输入
-// 判断是否符合报告编号格式
+// 判断是否符合查询编号格式
 inputCode.addEventListener('input', (event) => {
     const value = event.target.value;
     // 限制只允许输入数字
@@ -235,7 +235,7 @@ inputCode.addEventListener('input', (event) => {
     }
     if (validCode.test(value)) {
         // 查询码合法
-        // 判断报告编号、用户名、手机号（或邮箱）是否都存在
+        // 判断查询编号、用户名、手机号（或邮箱）是否都存在
         if (validReportId.test(reportId.value) && inputName.value != null && inputPhoneOrEmail.value != null) {
             // 输入框内容均合法，允许查询按钮的点击
             btnQuery.disabled = false;
@@ -252,7 +252,7 @@ inputCode.addEventListener('input', (event) => {
 
 // 报告查询
 function getReport() {
-    // 检查报告编号、查询码是否合法，联系人、电话是否存在
+    // 检查查询编号、查询码是否合法，联系人、电话是否存在
     if (validReportId.test(reportId.value) && inputName.value != null && inputPhoneOrEmail.value != null && inputCode.value != null) {
         // 调接口获取查询码
         let param = {
