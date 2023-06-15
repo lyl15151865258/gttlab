@@ -65,6 +65,27 @@ button:enabled {
     box-sizing: border-box;
 }
 
+#reportInput {
+    width: 55%;
+    margin-left: 10px;
+    border: 1px solid #E2E2E2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#reportId {
+    margin-left: 0;
+    border: none;
+    flex-grow: 1;
+}
+
+#icon {
+    width: 25px;
+    height: 25px;
+    margin-right: 2px;
+}
+
 .report-content .input-code {
     width: 26%;
     padding: 5px;

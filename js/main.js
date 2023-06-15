@@ -85,60 +85,64 @@ reportId.addEventListener('input', (event) => {
     }
     if (validReportId.test(value)) {
         // 查询编号合法
-        let param = {
-            reportId: value,
-        };
-        axios.request({
-            url: BASE_URL + "/order/queryOrder",
-            method: "post",
-            data: param,
-            withCredentials: true
-        }).then(res => {
-            if (res.status === 200) {
-                // 查询项目信息接口调用成功
-                if (res.data.code === 1001) {
-                    if (res.data.data.linkman != null && res.data.data.mobile != null) {
-                        inputName.value = res.data.data.linkman;
-                        inputPhoneOrEmail.value = res.data.data.phoneOrEmail;
-                        // 正确获取信息后允许点击获取查询码按钮
-                        if (validReportId.test(value) && inputName.value != null && inputPhoneOrEmail.value != null) {
-                            if (!isCounting) {
-                                btnCode.disabled = false;
-                            }
-                            // 如果查询码内容符合要求，允许点击查询按钮
-                            if (validCode.test(inputCode.value)) {
-                                btnQuery.disabled = false;
-                            }
-                        }
-                        hideError();
-                    } else {
-                        clearData();
-                        showError("没有查询到报告联系人", "#FF0000");
-                    }
-                } else if (res.data.code === 1011) {
-                    clearData();
-                    showError("查询编号不存在，请检查", "#FF0000");
-                } else if (res.data.code === 1012) {
-                    clearData();
-                    showError("检测项目不存在，请检查", "#FF0000");
-                } else {
-                    clearData();
-                    showError("查询报告联系人失败", "#FF0000");
-                }
-            } else {
-                // 未获取到项目信息，禁止点击按钮
-                clearData();
-                showError("查询报告联系人失败", "#FF0000");
-            }
-        }).catch(error => {
-            clearData();
-            showError(error, "#FF0000");
-        });
+        getQueryOrder(value);
     } else {
         clearData();
         hideError();
     }
 });
+
+function getQueryOrder(value) {
+    let param = {
+        reportId: value,
+    };
+    axios.request({
+        url: BASE_URL + "/order/queryOrder",
+        method: "post",
+        data: param,
+        withCredentials: true
+    }).then(res => {
+        if (res.status === 200) {
+            // 查询项目信息接口调用成功
+            if (res.data.code === 1001) {
+                if (res.data.data.linkman != null && res.data.data.mobile != null) {
+                    inputName.value = res.data.data.linkman;
+                    inputPhoneOrEmail.value = res.data.data.phoneOrEmail;
+                    // 正确获取信息后允许点击获取查询码按钮
+                    if (validReportId.test(value) && inputName.value != null && inputPhoneOrEmail.value != null) {
+                        if (!isCounting) {
+                            btnCode.disabled = false;
+                        }
+                        // 如果查询码内容符合要求，允许点击查询按钮
+                        if (validCode.test(inputCode.value)) {
+                            btnQuery.disabled = false;
+                        }
+                    }
+                    hideError();
+                } else {
+                    clearData();
+                    showError("没有查询到报告联系人", "#FF0000");
+                }
+            } else if (res.data.code === 1011) {
+                clearData();
+                showError("查询编号不存在，请检查", "#FF0000");
+            } else if (res.data.code === 1012) {
+                clearData();
+                showError("检测项目不存在，请检查", "#FF0000");
+            } else {
+                clearData();
+                showError("查询报告联系人失败", "#FF0000");
+            }
+        } else {
+            // 未获取到项目信息，禁止点击按钮
+            clearData();
+            showError("查询报告联系人失败", "#FF0000");
+        }
+    }).catch(error => {
+        clearData();
+        showError(error, "#FF0000");
+    });
+}
 
 // 清除输入框内容并禁止点击按钮
 function clearData() {
@@ -348,3 +352,45 @@ function isApple() {
         return false;
     }
 }
+
+// 移动端二维码扫描
+function scanQrCode() {
+    window.open('//996315.com/api/scan/?redirect_uri=' + encodeURIComponent(location.href));
+}
+
+// 获取二维码字符串
+function GetQueryString(name) {
+    var reg = new RegExp("\\b" + name + "=([^&]*)");
+    var r = decodeURIComponent(location.href).match(reg);
+    if (r != null) return r[1];
+}
+
+$(document).ready(function () {
+    var qr = GetQueryString("qrresult");
+    if (qr != null) {
+        // 页面由用户点击扫码完成后跳转回来，获取的二维码带有链接，先截取最后的报告号
+        var startIndex = qr.indexOf("id=");
+        // 如果找到了 "id="，则截取其后面的子字符串
+        if (startIndex !== -1) {
+            // 加上 3 是因为 "id=" 的长度为 3
+            var id = qr.substring(startIndex + 3);
+            // 校验查询编号是否合法
+            if (validReportId.test(id)) {
+                $("#reportId").val(id);
+                getQueryOrder(id);
+            } else {
+                alert("报告编号不合法")
+            }
+        }
+    } else {
+        // 页面由用户直接扫报告封面二维码跳转而来或手动输入网址而来
+        var params = new URLSearchParams(window.location.search);
+        // 获取链接中的参数并设置到输入框
+        var reportId = params.get("id");
+        if (validReportId.test(reportId)) {
+            // 如果报告编号合法
+            $("#reportId").val(reportId);
+            getQueryOrder(reportId);
+        }
+    }
+});
