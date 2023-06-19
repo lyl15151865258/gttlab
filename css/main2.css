@@ -187,6 +187,12 @@ button:enabled {
     color: #545454;
 }
 
+.team-content .item-right .mail {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #545454;
+}
+
 .team-content li {
     margin-top: 5px;
     font-size: 14px;

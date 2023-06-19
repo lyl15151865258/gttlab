@@ -352,6 +352,13 @@ button:enabled {
     color: #545454;
 }
 
+.team-content .item-bottom .mail {
+    margin-top: 20px;
+    margin-left: 15px;
+    font-size: 15px;
+    color: #545454;
+}
+
 .team-content ul {
     margin: 0.8vw;
 }
