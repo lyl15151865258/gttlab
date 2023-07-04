@@ -1,0 +1,59 @@
+#fullscreen {
+    padding: 8px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+#greeting {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form {
+    padding: 0;
+}
+
+.title {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+textarea {
+    width: 100%;
+    margin-top: 10px;
+    padding: 5px;
+    flex: 1;
+    font-size: 16px;
+    border: 1px solid #aaaaaa;
+    border-radius: 2px;
+    box-sizing: border-box;
+}
+
+#submitWork {
+    margin: 20px 0;
+    visibility: hidden;
+}
+
+#date{
+    display: flex;
+    align-items: center;
+    height: 30px;
+    padding: 0 20px 0 20px;
+    border: 1px solid #aaaaaa;
+    border-radius: 2px;
+}
+
+#selectDate{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.changeDate {
+    height: 30px;
+    padding: 0 20px 0 20px;
+    color: #000;
+}
