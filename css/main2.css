@@ -101,6 +101,28 @@ button:enabled {
     font-weight: bold;
 }
 
+.statement {
+  padding: 10px;
+}
+
+.statement h4 {
+  font-size: 16px;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.statement p {
+  text-indent: 2em;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+#company_name {
+  float: right;
+  margin-top: 5px;
+}
+
 /* 公司简介end */
 
 
@@ -412,7 +434,8 @@ h3 {
 
 .container2 .left p {
     font-size: 14px;
-    word-break: break-word;
+    word-wrap: break-word;
+    word-break: break-all;
     text-align: justify;
     line-height: 1.8rem;
 }
